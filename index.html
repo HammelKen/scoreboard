@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scoreboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="main-container">
+    <div class="top-right-buttons">
+      <button class="add-team-btn" id="addTeamBtn">+ Team</button>
+      <button class="dark-mode-btn" id="darkModeToggle">🌙</button>
+      <button class="open-save-load-modal-btn" id="openSaveLoadModalBtn">💾</button>
+    </div>
+  <h1 class="main-title">🎮 Scoreboard 🎮</h1>
+  <p>simple & easy - for up to 15 players/teams</p>
+  <div id="autoSaveFeedback" class="auto-save-feedback"></div>
+  <div class="scoreboard" id="scoreboard"></div>
+
+  <div class="timer">
+    <div class="time" id="timer">00:00</div>
+    <div class="timer-buttons">
+      <button id="timerBtn">Start</button>
+      <button id="resetBtn" class="reset-btn">Reset</button>
+    </div>
+  </div>
+
+  <div id="colorPickerDialog" class="color-picker-dialog">
+    <div class="color-picker-content">
+      <h3>Teamfarbe auswählen</h3>
+      <div class="color-preview" id="colorPreview"></div>
+      <div class="color-palette" id="colorPalette"></div>
+      <div class="color-selection">
+        <label for="customColor">Eigene Farbe</label>
+        <input type="color" id="customColor">
+      </div>
+      <div class="dialog-buttons">
+        <button id="applyColorBtn">Anwenden</button>
+        <button id="cancelColorBtn">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="saveLoadModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeSaveLoadModal">&times;</span>
+      <h2>Spiel speichern & laden</h2>
+
+      <div class="modal-section">
+        <label for="saveNameModal">Speichername:</label>
+        <input type="text" id="saveNameModal" placeholder="Name eingeben" />
+        <button id="saveGameModalBtn">💾 Speichern</button>
+      </div>
+
+      <div class="modal-section">
+        <label for="gameNoteModal">Notizen zum Spiel:</label>
+        <textarea id="gameNoteModal" rows="3" placeholder="Notizen hier..."></textarea>
+      </div>
+
+      <div class="modal-section">
+        <label for="savedGamesModal">Gespeicherte Spiele laden:</label>
+        <select id="savedGamesModal">
+          <option disabled selected value="default">📂 Spielstand auswählen</option>
+          </select>
+        <button id="loadGameModalBtn" style="margin-top: 10px;">📂 Laden</button>
+        <div class="last-saved" id="lastSavedModal"></div>
+        <button id="deleteGameModalBtn" class="reset-btn" style="margin-top: 10px;">🗑️ Löschen</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <script src="script.js"></script>
+</body>
+</html>
