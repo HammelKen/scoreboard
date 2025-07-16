@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scoreboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
@@ -10,20 +10,62 @@
 <body>
   <div class="main-container">
     <div class="top-right-buttons">
-      <button class="add-team-btn" id="addTeamBtn">+ Team</button>
-      <button class="dark-mode-btn" id="darkModeToggle">🌙</button>
-      <button class="open-save-load-modal-btn" id="openSaveLoadModalBtn">💾</button>
+      <button class="top-right-common-btn" id="addTeamBtn" title="Team hinzufügen">➕</button>
+      <button class="top-right-common-btn" id="resetAllDataBtn" title="Punkte resetten">🔄</button>
+      <button class="top-right-common-btn" id="toggleTimerBtn" title="Timer einblenden">⏰</button>
+      <button class="top-right-common-btn" id="toggleBulkAdjustmentBtn" title="Alle Punkte editieren">🔢</button>
+      <button class="top-right-common-btn" id="toggleRankingsBtn" title="Scoreboard">🏆</button>
+      <button class="top-right-common-btn" id="openSaveLoadModalBtn" title="Speichern/Laden">💾</button>
     </div>
-  <h1 class="main-title">🎮 Scoreboard 🎮</h1>
-  <p>simple & easy - for up to 15 players/teams</p>
-  <div id="autoSaveFeedback" class="auto-save-feedback"></div>
-  <div class="scoreboard" id="scoreboard"></div>
+    <h1 class="main-title">🎮 Scoreboard 🎮</h1>
+    <p>for up to 16 players/teams</p>
+    <div id="autoSaveFeedback" class="auto-save-feedback"></div>
+    <div class="scoreboard" id="scoreboard"></div>
 
-  <div class="timer">
-    <div class="time" id="timer">00:00</div>
-    <div class="timer-buttons">
-      <button id="timerBtn">Start</button>
-      <button id="resetBtn" class="reset-btn">Reset</button>
+    <div id="timerContainer" style="display: none;">
+      <div class="timer">
+        <div class="time" id="timer">00:00</div>
+        <div class="timer-buttons">
+          <button id="timerBtn" class="btn-plus">Start</button>
+          <button id="resetCurrentGameBtn" class="btn-minus">Restart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ranglisten-Modal -->
+  <div id="rankingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeRankingsModal">&times;</span>
+      <div id="rankingContainer" class="ranking-container">
+        <h2>Rangliste</h2>
+        <table id="rankingsTable">
+          <thead>
+            <tr>
+              <th>Rang</th>
+              <th>Team</th>
+              <th>Punkte</th>
+            </tr>
+          </thead>
+          <tbody id="rankingsTableBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Punkte für alle anpassen Modal -->
+  <div id="bulkAdjustmentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" id="closeBulkAdjustmentModal">&times;</span>
+      <div id="bulkAdjustmentContainer" class="bulk-score-adjustment">
+        <h2>Punkte für alle Teams anpassen</h2>
+        <div class="input-group">
+          <input type="number" id="bulkScoreAmount" placeholder="Punkte">
+          <button id="addBulkScoreBtn" class="btn-plus" title="Punkt hinzufügen">➕</button>
+          <button id="subtractBulkScoreBtn" class="btn-minus" title="Punkt entfernen">➖</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -33,12 +75,12 @@
       <div class="color-preview" id="colorPreview"></div>
       <div class="color-palette" id="colorPalette"></div>
       <div class="color-selection">
-        <label for="customColor">Eigene Farbe</label>
+        <label for="customColor">Eigene Farbe:</label>
         <input type="color" id="customColor">
       </div>
       <div class="dialog-buttons">
         <button id="applyColorBtn">Anwenden</button>
-        <button id="cancelColorBtn">Abbrechen</button>
+        <button id="cancelColorBtn" class="btn-minus">Abbrechen</button>
       </div>
     </div>
   </div>
@@ -46,17 +88,15 @@
   <div id="saveLoadModal" class="modal">
     <div class="modal-content">
       <span class="close-button" id="closeSaveLoadModal">&times;</span>
-      <h2>Spiel speichern & laden</h2>
-
+      <h2>Spiel speichern/laden</h2>
       <div class="modal-section">
-        <label for="saveNameModal">Speichername:</label>
-        <input type="text" id="saveNameModal" placeholder="Name eingeben" />
-        <button id="saveGameModalBtn">💾 Speichern</button>
+        <label for="saveNameModal">Name des Spielstands:</label>
+        <input type="text" id="saveNameModal" placeholder="Name des Spielstands">
+        <button id="saveGameModalBtn" style="margin-top: 10px;">💾 Speichern</button>
       </div>
-
       <div class="modal-section">
-        <label for="gameNoteModal">Notizen zum Spiel:</label>
-        <textarea id="gameNoteModal" rows="3" placeholder="Notizen hier..."></textarea>
+        <label for="gameNoteModal">Notizen (optional):</label>
+        <textarea id="gameNoteModal" placeholder="Notizen hier..."></textarea>
       </div>
 
       <div class="modal-section">
@@ -66,12 +106,34 @@
           </select>
         <button id="loadGameModalBtn" style="margin-top: 10px;">📂 Laden</button>
         <div class="last-saved" id="lastSavedModal"></div>
-        <button id="deleteGameModalBtn" class="reset-btn" style="margin-top: 10px;">🗑️ Löschen</button>
+        <button id="deleteGameModalBtn" class="btn-minus" style="margin-top: 10px;">🗑️ Löschen</button>
       </div>
     </div>
   </div>
 
-</div>
+  <div id="customAlertModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" data-close-modal="alert">&times;</span>
+      <h3 id="customAlertTitle">Achtung!</h3>
+      <p id="customAlertMessage"></p>
+      <div class="dialog-buttons">
+        <button id="customAlertOkBtn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="customConfirmModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button" data-close-modal="confirm">&times;</span>
+      <h3 id="customConfirmTitle">Bestätigung erforderlich</h3>
+      <p id="customConfirmMessage"></p>
+      <div class="dialog-buttons">
+        <button id="customConfirmYesBtn" class="btn-plus">Ja</button>
+        <button id="customConfirmNoBtn" class="btn-minus">Nein</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
